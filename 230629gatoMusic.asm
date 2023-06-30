@@ -617,9 +617,20 @@ process_player_input:
 
 ;████████████████████████████████████████████████████████████████
 
+
  lda PRESS_BREAK
  cmp #$00
  bne @press_break
+
+ lda INPUT_1	;select and start buttons
+ and #%00110000
+ cmp #%00110000
+ bne @select_not_pressed
+ sta PRESS_BREAK
+ jmp @restart
+
+ @select_not_pressed:
+
  lda INPUT_1	;a button
  and #%10000000
  cmp #%10000000
@@ -628,6 +639,8 @@ process_player_input:
  lda BOARD_WIN
  cmp #$00
  beq @not_win
+
+ @restart:
 
  lda #$0a
  ldx #$00
